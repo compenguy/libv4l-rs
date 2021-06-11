@@ -32,7 +32,7 @@ impl Device {
     /// ```
     pub fn new(index: usize) -> io::Result<Self> {
         let path = format!("{}{}", "/dev/video", index);
-        let fd = v4l2::open(&path, libc::O_RDWR)?;
+        let fd = v4l2::open(&path, libc::O_WRONLY | libc::O_SYNC)?;
 
         if fd == -1 {
             return Err(io::Error::last_os_error());
@@ -58,7 +58,7 @@ impl Device {
     /// let dev = Device::with_path("/dev/video0");
     /// ```
     pub fn with_path<P: AsRef<Path>>(path: P) -> io::Result<Self> {
-        let fd = v4l2::open(&path, libc::O_RDWR)?;
+        let fd = v4l2::open(&path, libc::O_WRONLY | libc::O_SYNC)?;
 
         if fd == -1 {
             return Err(io::Error::last_os_error());
